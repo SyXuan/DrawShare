@@ -37,7 +37,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // 初始化數據庫
-const db = new sqlite3.Database(path.join(__dirname, 'drawing_share.db'), (err) => {
+const db = new sqlite3.Database(path.join(__dirname, 'data', 'drawing_share.db'), (err) => {
   if (err) {
     logger.error('無法連接到數據庫', err);
   } else {

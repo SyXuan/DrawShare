@@ -13,7 +13,7 @@ services:
     volumes:
       - ./logs:/app/logs
       - ./public/images:/app/public/images
-      - ./drawing_share.db:/app/drawing_share.db
+      - ./data:/app/data
     networks:
       - drawing-share-network
 
