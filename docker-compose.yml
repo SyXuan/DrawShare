@@ -1,0 +1,22 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: drawing-share-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    volumes:
+      - ./logs:/app/logs
+      - ./public/images:/app/public/images
+      - ./drawing_share.db:/app/drawing_share.db
+    networks:
+      - drawing-share-network
+
+networks:
+  drawing-share-network:
+    driver: bridge

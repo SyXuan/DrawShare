@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>繪圖 - 繪圖分享應用</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f8f9fa;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        .draw-container {
+            max-width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 5px;
+        }
+        .canvas-container {
+            flex: 1;
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+            position: relative;
+        }
+        canvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+        .color-palette {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 10px 0;
+            flex-wrap: wrap;
+        }
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid #e2e8f0;
+            transition: transform 0.2s;
+        }
+        .color-option:hover, .color-option.active {
+            transform: scale(1.1);
+            border-color: #4a5568;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+        }
+        .btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        .btn-primary {
+            background-color: #4f46e5;
+            color: white;
+        }
+        .btn-secondary {
+            background-color: #e5e7eb;
+            color: #4b5563;
+        }
+        .btn-danger {
+            background-color: #ef4444;
+            color: white;
+        }
+        .brush-size {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .brush-size-label {
+            font-size: 14px;
+            color: #4b5563;
+        }
+        .brush-size-input {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="draw-container">
+        <div class="header">
+            <h1 class="text-xl font-bold text-gray-800">創作你的藝術</h1>
+            <div id="user-info" class="text-sm text-gray-600">
+                <i class="fas fa-user mr-1"></i><span id="username-display">加載中...</span>
+            </div>
+        </div>
+        
+        <div class="canvas-container">
+            <canvas id="drawing-canvas"></canvas>
+        </div>
+        
+        <div class="brush-size">
+            <span class="brush-size-label">筆刷大小:</span>
+            <input type="range" min="1" max="20" value="5" class="brush-size-input" id="brush-size">
+            <span id="size-display">5px</span>
+        </div>
+        
+        <div class="color-palette">
+            <div class="color-option active" style="background-color: #000000;" data-color="#000000"></div>
+            <div class="color-option" style="background-color: #e53e3e;" data-color="#e53e3e"></div>
+            <div class="color-option" style="background-color: #dd6b20;" data-color="#dd6b20"></div>
+            <div class="color-option" style="background-color: #d69e2e;" data-color="#d69e2e"></div>
+            <div class="color-option" style="background-color: #38a169;" data-color="#38a169"></div>
+            <div class="color-option" style="background-color: #3182ce;" data-color="#3182ce"></div>
+            <div class="color-option" style="background-color: #805ad5;" data-color="#805ad5"></div>
+            <div class="color-option" style="background-color: #d53f8c;" data-color="#d53f8c"></div>
+        </div>
+        
+        <div class="action-buttons">
+            <button class="btn btn-danger" id="clear-btn">
+                <i class="fas fa-trash-alt"></i> 清除
+            </button>
+            
+            <button class="btn btn-secondary" id="download-btn">
+                <i class="fas fa-download"></i> 下載
+            </button>
+            
+            <button class="btn btn-primary" id="submit-btn">
+                <i class="fas fa-paper-plane"></i> 送出
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // 獲取用戶名並顯示
+        document.addEventListener('DOMContentLoaded', function() {
+            const username = localStorage.getItem('username') || '訪客';
+            document.getElementById('username-display').textContent = username;
+            
+            // 初始化畫布
+            initCanvas();
+        });
+        
+        function initCanvas() {
+            const canvas = document.getElementById('drawing-canvas');
+            const ctx = canvas.getContext('2d');
+            const container = document.querySelector('.canvas-container');
+            
+            // 設置畫布大小為容器大小
+            function resizeCanvas() {
+                canvas.width = container.clientWidth;
+                canvas.height = container.clientHeight;
+                // 設置白色背景
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+            
+            // 初始化和窗口大小變化時調整畫布大小
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            
+            // 繪圖變量
+            let isDrawing = false;
+            let lastX = 0;
+            let lastY = 0;
+            let currentColor = '#000000';
+            let brushSize = 5;
+            
+            // 更新筆刷大小顯示
+            const brushSizeInput = document.getElementById('brush-size');
+            const sizeDisplay = document.getElementById('size-display');
+            
+            brushSizeInput.addEventListener('input', function() {
+                brushSize = this.value;
+                sizeDisplay.textContent = `${brushSize}px`;
+            });
+            
+            // 繪圖事件處理
+            function startDrawing(e) {
+                isDrawing = true;
+                [lastX, lastY] = getCoordinates(e);
+            }
+            
+            function draw(e) {
+                if (!isDrawing) return;
+                
+                const [x, y] = getCoordinates(e);
+                
+                ctx.lineJoin = 'round';
+                ctx.lineCap = 'round';
+                ctx.lineWidth = brushSize;
+                ctx.strokeStyle = currentColor;
+                
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(x, y);
+                ctx.stroke();
+                
+                [lastX, lastY] = [x, y];
+            }
+            
+            function stopDrawing() {
+                isDrawing = false;
+            }
+            
+            // 獲取鼠標/觸摸坐標
+            function getCoordinates(e) {
+                let x, y;
+                
+                if (e.type.includes('touch')) {
+                    const rect = canvas.getBoundingClientRect();
+                    x = e.touches[0].clientX - rect.left;
+                    y = e.touches[0].clientY - rect.top;
+                } else {
+                    const rect = canvas.getBoundingClientRect();
+                    x = e.clientX - rect.left;
+                    y = e.clientY - rect.top;
+                }
+                
+                return [x, y];
+            }
+            
+            // 添加事件監聽器
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseout', stopDrawing);
+            
+            // 觸摸事件支持
+            canvas.addEventListener('touchstart', startDrawing);
+            canvas.addEventListener('touchmove', draw);
+            canvas.addEventListener('touchend', stopDrawing);
+            
+            // 顏色選擇
+            const colorOptions = document.querySelectorAll('.color-option');
+            colorOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // 移除之前的活動狀態
+                    document.querySelector('.color-option.active').classList.remove('active');
+                    // 設置新的活動顏色
+                    this.classList.add('active');
+                    currentColor = this.dataset.color;
+                });
+            });
+            
+            // 清除畫布
+            document.getElementById('clear-btn').addEventListener('click', function() {
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            });
+            
+            // 下載畫布
+            document.getElementById('download-btn').addEventListener('click', function() {
+                const link = document.createElement('a');
+                link.download = `繪圖作品_${new Date().toISOString().slice(0, 10)}.png`;
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+            
+            // 送出畫布
+            document.getElementById('submit-btn').addEventListener('click', function() {
+                // 模擬上傳到伺服器
+                // 在實際應用中，這裡會有 AJAX 請求
+                
+                // 保存畫布數據到 localStorage 用於展示
+                localStorage.setItem('lastDrawing', canvas.toDataURL());
+                
+                // 跳轉到畫廊頁面
+                if (window.parent && window.parent.changeFrame) {
+                    window.parent.changeFrame('gallery.html');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+node_modules
+npm-debug.log
+logs
+*.log
+drawing_share.db
+.git
+.gitignore
+README.md
+docs
+design

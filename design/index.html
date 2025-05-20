@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>繪圖分享應用</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        .iphone-container {
+            width: 390px; /* iPhone 15 Pro width */
+            height: 844px; /* iPhone 15 Pro height */
+            background-color: white;
+            border-radius: 55px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            border: 12px solid #1a1a1a;
+        }
+        .status-bar {
+            height: 44px;
+            background-color: #000;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 14px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
+        }
+        .tab-bar {
+            height: 83px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+        }
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #8e8e93;
+            font-size: 10px;
+            padding: 8px 0;
+        }
+        .tab-item.active {
+            color: #007aff;
+        }
+        .tab-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+        .content-area {
+            position: absolute;
+            top: 44px;
+            left: 0;
+            right: 0;
+            bottom: 83px;
+            overflow: hidden;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="iphone-container">
+        <!-- iOS Status Bar -->
+        <div class="status-bar">
+            <div>9:41</div>
+            <div class="flex space-x-2">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+        
+        <!-- Content Area with iframe -->
+        <div class="content-area">
+            <iframe id="content-frame" src="home.html" frameborder="0"></iframe>
+        </div>
+        
+        <!-- iOS-style Tab Bar -->
+        <div class="tab-bar">
+            <div class="tab-item active" onclick="changeFrame('home.html')">
+                <i class="tab-icon fas fa-home"></i>
+                <span>首頁</span>
+            </div>
+            <div class="tab-item" onclick="changeFrame('draw.html')">
+                <i class="tab-icon fas fa-paint-brush"></i>
+                <span>繪圖</span>
+            </div>
+            <div class="tab-item" onclick="changeFrame('gallery.html')">
+                <i class="tab-icon fas fa-images"></i>
+                <span>畫廊</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function changeFrame(url) {
+            document.getElementById('content-frame').src = url;
+            
+            // Update active tab
+            const tabs = document.querySelectorAll('.tab-item');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Find and activate the clicked tab
+            const activeTab = Array.from(tabs).find(tab => {
+                return tab.getAttribute('onclick').includes(url);
+            });
+            if (activeTab) {
+                activeTab.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>

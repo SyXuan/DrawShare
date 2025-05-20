@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>畫廊 - 繪圖分享應用</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f8f9fa;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        .gallery-container {
+            max-width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 5px;
+            margin-bottom: 15px;
+        }
+        .image-container {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .drawing-image {
+            width: 100%;
+            display: block;
+        }
+        .status-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .status-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        .success-icon {
+            color: #10b981;
+        }
+        .error-icon {
+            color: #ef4444;
+        }
+        .btn {
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background-color: #4f46e5;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #4338ca;
+        }
+        .btn-secondary {
+            background-color: #e5e7eb;
+            color: #4b5563;
+        }
+        .btn-secondary:hover {
+            background-color: #d1d5db;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .image-info {
+            padding: 15px;
+            border-top: 1px solid #e5e7eb;
+        }
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #4f46e5;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="gallery-container">
+        <div class="header">
+            <h1 class="text-xl font-bold text-gray-800">你的作品</h1>
+            <div id="user-info" class="text-sm text-gray-600">
+                <i class="fas fa-user mr-1"></i><span id="username-display">加載中...</span>
+            </div>
+        </div>
+        
+        <div class="image-container">
+            <img id="drawing-image" class="drawing-image" src="" alt="你的繪圖作品">
+            <div class="image-info">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="font-medium text-gray-800" id="image-title">繪圖作品</h3>
+                        <p class="text-sm text-gray-500" id="image-date"></p>
+                    </div>
+                    <button class="text-gray-500 hover:text-gray-700" id="download-btn">
+                        <i class="fas fa-download text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="status-card" id="upload-status">
+            <!-- 狀態內容將由 JavaScript 動態生成 -->
+        </div>
+        
+        <div class="action-buttons">
+            <button class="btn btn-secondary flex-1" id="new-drawing-btn">
+                <i class="fas fa-paint-brush"></i> 新繪圖
+            </button>
+            <button class="btn btn-primary flex-1" id="retry-btn">
+                <i class="fas fa-redo"></i> 重新上傳
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 獲取用戶名並顯示
+            const username = localStorage.getItem('username') || '訪客';
+            document.getElementById('username-display').textContent = username;
+            
+            // 獲取並顯示繪圖
+            const drawingData = localStorage.getItem('lastDrawing');
+            const drawingImage = document.getElementById('drawing-image');
+            
+            if (drawingData) {
+                drawingImage.src = drawingData;
+                
+                // 設置日期
+                const now = new Date();
+                const formattedDate = now.toLocaleDateString('zh-TW', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                document.getElementById('image-date').textContent = formattedDate;
+                document.getElementById('image-title').textContent = `${username}的繪圖作品`;
+            } else {
+                // 如果沒有繪圖，顯示預設圖片
+                drawingImage.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2YzZjRmNiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMThweCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgZmlsbD0iIzk0YTNiOCI+6Lqr5YyF5piv56m65piv5pyD5pyJ5L2g55qE57Sr5ZyW5L2c5ZOBIDwvdGV4dD48L3N2Zz4=';
+            }
+            
+            // 模擬上傳狀態
+            simulateUpload();
+            
+            // 下載按鈕
+            document.getElementById('download-btn').addEventListener('click', function() {
+                if (drawingData) {
+                    const link = document.createElement('a');
+                    link.download = `繪圖作品_${new Date().toISOString().slice(0, 10)}.png`;
+                    link.href = drawingData;
+                    link.click();
+                }
+            });
+            
+            // 新繪圖按鈕
+            document.getElementById('new-drawing-btn').addEventListener('click', function() {
+                if (window.parent && window.parent.changeFrame) {
+                    window.parent.changeFrame('draw.html');
+                }
+            });
+            
+            // 重試按鈕
+            document.getElementById('retry-btn').addEventListener('click', function() {
+                simulateUpload();
+            });
+        });
+        
+        // 模擬上傳過程
+        function simulateUpload() {
+            const statusCard = document.getElementById('upload-status');
+            const retryBtn = document.getElementById('retry-btn');
+            
+            // 顯示上傳中狀態
+            statusCard.innerHTML = `
+                <div class="text-center">
+                    <div class="loading-spinner mb-4"></div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">正在上傳...</h3>
+                    <p class="text-gray-600">請稍候，我們正在將您的作品上傳到伺服器</p>
+                </div>
+            `;
+            retryBtn.disabled = true;
+            retryBtn.classList.add('opacity-50');
+            
+            // 隨機決定上傳成功或失敗
+            const isSuccess = Math.random() > 0.5;
+            
+            // 延遲顯示結果
+            setTimeout(function() {
+                if (isSuccess) {
+                    // 上傳成功
+                    statusCard.innerHTML = `
+                        <div class="text-center">
+                            <div class="status-icon success-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2">上傳成功！</h3>
+                            <p class="text-gray-600">您的作品已成功上傳到伺服器</p>
+                        </div>
+                    `;
+                } else {
+                    // 上傳失敗
+                    statusCard.innerHTML = `
+                        <div class="text-center">
+                            <div class="status-icon error-icon">
+                                <i class="fas fa-exclamation-circle"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2">上傳失敗</h3>
+                            <p class="text-gray-600">連接伺服器時發生錯誤，請點擊下方按鈕重試</p>
+                        </div>
+                    `;
+                }
+                
+                retryBtn.disabled = false;
+                retryBtn.classList.remove('opacity-50');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

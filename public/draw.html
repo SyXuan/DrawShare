@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>繪圖 - DrawShare</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="draw-container">
+        <div class="header">
+            <h1 class="text-xl font-bold text-gray-800">創作你的藝術</h1>
+            <div id="user-info" class="text-sm text-gray-600">
+                <i class="fas fa-user mr-1"></i><span id="username-display">加載中...</span>
+            </div>
+        </div>
+        
+        <div class="canvas-container">
+            <canvas id="drawing-canvas"></canvas>
+        </div>
+        
+        <div class="brush-size">
+            <span class="brush-size-label">筆刷大小:</span>
+            <input type="range" min="1" max="20" value="5" class="brush-size-input" id="brush-size">
+            <span id="size-display">5px</span>
+        </div>
+        
+        <div class="color-picker-container">
+            <span class="color-picker-label">調色盤:</span>
+            <div class="color-picker-preview" id="color-preview" style="display: none;"></div>
+            <input type="color" id="color-picker" value="#000000" class="cursor-pointer">
+        </div>
+        
+        <div class="color-palette">
+            <div class="color-option active" style="background-color: #000000;" data-color="#000000"></div>
+            <div class="color-option" style="background-color: #e53e3e;" data-color="#e53e3e"></div>
+            <div class="color-option" style="background-color: #dd6b20;" data-color="#dd6b20"></div>
+            <div class="color-option" style="background-color: #d69e2e;" data-color="#d69e2e"></div>
+            <div class="color-option" style="background-color: #38a169;" data-color="#38a169"></div>
+            <div class="color-option" style="background-color: #3182ce;" data-color="#3182ce"></div>
+            <div class="color-option" style="background-color: #805ad5;" data-color="#805ad5"></div>
+            <div class="color-option" style="background-color: #d53f8c;" data-color="#d53f8c"></div>
+        </div>
+        
+        <div class="action-buttons">
+            <button class="btn btn-danger" id="clear-btn">
+                <i class="fas fa-trash-alt"></i> 清除
+            </button>
+            
+            <button class="btn btn-secondary" id="download-btn">
+                <i class="fas fa-download"></i> 下載
+            </button>
+            
+            <button class="btn btn-primary" id="submit-btn">
+                <i class="fas fa-paper-plane"></i> 送出
+            </button>
+        </div>
+    </div>
+
+    <script src="/js/logger.js"></script>
+    <script src="/script.js"></script>
+</body>
+</html>

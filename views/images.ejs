@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>所有繪圖作品 - DrawShare</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .image-card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        .image-card:hover {
+            transform: translateY(-5px);
+        }
+        .image-thumbnail {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            cursor: pointer;
+        }
+        /* 模態框樣式 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.75);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .modal.show {
+            display: block;
+            opacity: 1;
+        }
+        .modal-content {
+            position: relative;
+            margin: 5% auto;
+            max-width: 90%;
+            max-height: 85vh;
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            animation: modalFadeIn 0.3s;
+        }
+        .modal-image {
+            width: 100%;
+            max-height: 70vh;
+            object-fit: contain;
+        }
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1010;
+            background-color: rgba(0, 0, 0, 0.5);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-info {
+            padding: 15px;
+        }
+        @keyframes modalFadeIn {
+            from {transform: translateY(-50px); opacity: 0;}
+            to {transform: translateY(0); opacity: 1;}
+        }
+    </style>
+</head>
+<body class="p-6">
+    <div class="container mx-auto">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-2xl font-bold text-gray-800">所有繪圖作品</h1>
+            <a href="/" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">
+                <i class="fas fa-paint-brush mr-2"></i>創建新繪圖
+            </a>
+        </div>
+        
+        <% if (images && images.length > 0) { %>
+            <div class="gallery-grid">
+                <% images.forEach(image => { %>
+                    <div class="image-card">
+                        <div class="cursor-pointer" onclick="openModal('<%= image.id %>', '<%= image.name %>', '<%= image.uploaded_at %>')">
+                            <img src="/images/<%= image.id %>" alt="<%= image.name %>的繪圖" class="image-thumbnail">
+                        </div>
+                        <div class="p-4">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h3 class="font-medium text-gray-800"><%= image.name %></h3>
+                                    <p class="text-sm text-gray-500"><%= new Date(image.uploaded_at).toLocaleString('zh-TW') %></p>
+                                </div>
+                                <button onclick="openModal('<%= image.id %>', '<%= image.name %>', '<%= image.uploaded_at %>')" class="text-indigo-600 hover:text-indigo-800">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        <% } else { %>
+            <div class="text-center py-12 bg-white rounded-lg shadow">
+                <i class="fas fa-image text-gray-400 text-5xl mb-4"></i>
+                <h2 class="text-xl font-medium text-gray-700 mb-2">還沒有繪圖作品</h2>
+                <p class="text-gray-500 mb-6">成為第一個上傳繪圖的人吧！</p>
+                <a href="/" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition">
+                    <i class="fas fa-paint-brush mr-2"></i>開始繪圖
+                </a>
+            </div>
+        <% } %>
+    </div>
+    
+    <!-- 模態框 -->
+    <div id="imageModal" class="modal">
+        <span class="modal-close" onclick="closeModal()">&times;</span>
+        <div class="modal-content">
+            <img id="modalImage" class="modal-image" src="" alt="繪圖作品">
+            <div class="modal-info">
+                <h2 id="modalTitle" class="text-xl font-medium text-gray-800 mb-2"></h2>
+                <p id="modalDate" class="text-sm text-gray-500"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 打開模態框
+        function openModal(imageId, imageName, uploadedAt) {
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalDate = document.getElementById('modalDate');
+            
+            // 設置模態框內容
+            modalImage.src = `/images/${imageId}`;
+            modalTitle.textContent = `${imageName}的繪圖`;
+            modalDate.textContent = new Date(uploadedAt).toLocaleString('zh-TW');
+            
+            // 顯示模態框
+            modal.classList.add('show');
+            
+            // 阻止頁面滾動
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // 關閉模態框
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('show');
+            
+            // 恢復頁面滾動
+            document.body.style.overflow = 'auto';
+        }
+        
+        // 點擊模態框背景關閉模態框
+        window.onclick = function(event) {
+            const modal = document.getElementById('imageModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+        
+        // 按ESC鍵關閉模態框
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
