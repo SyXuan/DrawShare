@@ -4,6 +4,8 @@ body {
     min-height: 100vh;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
     overscroll-behavior-y: none; /* 防止下拉刷新 */
     position: fixed;
     width: 100%;
@@ -14,7 +16,7 @@ body {
 /* 首頁樣式 */
 .app-container {
     max-width: 100%;
-    min-height: 100vh;
+    flex: 1 0 auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -204,4 +206,23 @@ canvas {
 
 .brush-size-input {
     flex: 1;
+}
+
+.footer {
+    flex-shrink: 0;
+    text-align: center;
+    color: #888;
+    font-size: 15px;
+    margin-top: 12px;
+    margin-bottom: 10vh;
+    letter-spacing: 0.5px;
+    user-select: none;
+}
+.footer-link {
+    color: #4f46e5;
+    text-decoration: underline;
+    font-weight: 500;
+}
+.footer-link:hover {
+    color: #805ad5;
 }
