@@ -37,6 +37,7 @@ app.use((req, res, next) => {
 // 設置靜態文件目錄
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/locales', express.static(path.join(__dirname, 'locales')));
+app.use(express.static(path.join(__dirname, 'public/images')))
 if (!fs.existsSync(path.join(__dirname, 'public/uploads'))) {
   logger.info('上傳目錄不存在，創建"public/uploads"目錄');
   fs.mkdirSync(path.join(__dirname, 'public/uploads'));
