@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= image.name %>的繪圖作品 - DrawShare</title>
+    <title><%= i18n.t('pages.image.title', {name: image.name}) %></title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -59,18 +59,18 @@
     <div class="container mx-auto max-w-4xl">
         <div class="flex justify-between items-center mb-6">
             <a href="/images" class="text-indigo-600 hover:text-indigo-800 flex items-center">
-                <i class="fas fa-arrow-left mr-2"></i>返回所有作品
+                <i class="fas fa-arrow-left mr-2"></i><%= i18n.t('pages.image.backToGallery') %>
             </a>
-            <h1 class="text-2xl font-bold text-gray-800"><%= image.name %>的繪圖作品</h1>
+            <h1 class="text-2xl font-bold text-gray-800"><%= i18n.t('pages.image.drawingOf', {name: image.name}) %></h1>
         </div>
         
         <div class="image-container mb-6">
-            <img src="/public/images/<%= image.image_file_name %>" alt="<%= image.name %>的繪圖" class="drawing-image">
+            <img src="/public/images/<%= image.image_file_name %>" alt="<%= i18n.t('pages.image.drawingOf', {name: image.name}) %>" class="drawing-image">
             <div class="p-4 border-t border-gray-200">
                 <div class="flex justify-between items-center">
                     <div>
-                        <h3 class="font-medium text-gray-800"><%= image.name %>的繪圖作品</h3>
-                        <p class="text-sm text-gray-500">上傳於 <%= new Date(image.uploaded_at).toLocaleString('zh-TW') %></p>
+                        <h3 class="font-medium text-gray-800"><%= i18n.t('pages.image.drawingOf', {name: image.name}) %></h3>
+                        <p class="text-sm text-gray-500"><%= i18n.t('common.uploadedAt', {date: new Date(image.uploaded_at).toLocaleString(i18n.language)}) %></p>
                     </div>
                     <a href="/public/images/<%= image.image_file_name %>" download class="text-gray-500 hover:text-gray-700">
                         <i class="fas fa-download text-lg"></i>
@@ -81,10 +81,10 @@
         
         <div class="action-buttons">
             <a href="/images" class="btn btn-secondary flex-1">
-                <i class="fas fa-images"></i> 查看所有作品
+                <i class="fas fa-images"></i> <%= i18n.t('pages.image.viewAll') %>
             </a>
             <a href="/" class="btn btn-primary flex-1">
-                <i class="fas fa-paint-brush"></i> 創建新繪圖
+                <i class="fas fa-paint-brush"></i> <%= i18n.t('pages.image.createNew') %>
             </a>
         </div>
     </div>

@@ -3,6 +3,7 @@ const path = require('path');
 const cors = require('cors');
 const sqlite3 = require('sqlite3').verbose();
 const createLogger = require('./utils/logger');
+const i18n = require('./i18n');
 
 // 創建應用程序日誌記錄器
 const responseTimeLogger = createLogger('responseTime');
@@ -16,6 +17,9 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// 設置i18next中間件
+app.use(i18n.handle);
 
 // 響應時間記錄中間件
 app.use((req, res, next) => {
@@ -31,6 +35,7 @@ app.use((req, res, next) => {
 
 // 設置靜態文件目錄
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/locales', express.static(path.join(__dirname, 'locales')));
 
 // 設置視圖引擎
 app.set('view engine', 'ejs');

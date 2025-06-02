@@ -14,8 +14,16 @@ function startDrawing() {
 document.addEventListener('DOMContentLoaded', function() {
     // 檢查當前頁面是否為繪圖頁面
     if (document.querySelector('.draw-container')) {
-        const username = localStorage.getItem('username') || '訪客';
-        document.getElementById('username-display').textContent = username;
+        // 等待i18next初始化完成
+        if (i18next.isInitialized) {
+            const username = localStorage.getItem('username') || i18next.t('common.guest');
+            document.getElementById('username-display').textContent = username;
+        } else {
+            i18next.on('initialized', function() {
+                const username = localStorage.getItem('username') || i18next.t('common.guest');
+                document.getElementById('username-display').textContent = username;
+            });
+        }
         
         // 初始化畫布
         initCanvas();
@@ -161,7 +169,8 @@ function initCanvas() {
     // 下載畫布
     document.getElementById('download-btn').addEventListener('click', function() {
         const link = document.createElement('a');
-        link.download = `繪圖作品_${new Date().toISOString().slice(0, 10)}.png`;
+        const date = new Date().toISOString().slice(0, 10);
+        link.download = i18next.t('pages.draw.drawingFilename', {date: date});
         link.href = canvas.toDataURL();
         link.click();
     });
@@ -186,15 +195,15 @@ function initCanvas() {
         // 檢查畫布是否為空白
         if (isCanvasBlank()) {
             // 顯示錯誤提示，加入用戶名稱
-            const username = localStorage.getItem('username') || '訪客';
-            alert(`${username}，似乎忘記畫圖囉，請先繪製一些內容！`);
+            const username = localStorage.getItem('username') || i18next.t('common.guest');
+            alert(i18next.t('pages.draw.emptyCanvasAlert', {username: username}));
             return;
         }
         
         // 顯示加載狀態
         const submitBtn = document.getElementById('submit-btn');
         const originalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 上傳中...';
+        submitBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${i18next.t('pages.draw.uploadingStatus')}`;
         submitBtn.disabled = true;
         
         // 獲取畫布數據
@@ -205,7 +214,7 @@ function initCanvas() {
         
         // 創建表單數據
         const formData = new FormData();
-        formData.append('name', localStorage.getItem('username') || '訪客');
+        formData.append('name', localStorage.getItem('username') || i18next.t('common.guest'));
         
         // 將 base64 圖片數據轉換為 Blob
         const blob = dataURItoBlob(imageData);
@@ -218,7 +227,7 @@ function initCanvas() {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('上傳失敗');
+                throw new Error(i18next.t('errors.uploadFailed'));
             }
             return response.json();
         })
@@ -238,14 +247,14 @@ function initCanvas() {
                     <div class="success-icon">
                         <i class="fas fa-check-circle"></i>
                     </div>
-                    <h2>上傳成功！</h2>
-                    <p>您的作品已成功上傳。</p>
+                    <h2>${i18next.t('pages.draw.uploadSuccess.title')}</h2>
+                    <p>${i18next.t('pages.draw.uploadSuccess.message')}</p>
                     <div class="success-actions">
                         <button id="download-now-btn" class="btn btn-secondary">
-                            <i class="fas fa-download"></i> 下載作品
+                            <i class="fas fa-download"></i> ${i18next.t('pages.draw.uploadSuccess.downloadButton')}
                         </button>
                         <button id="goto-gallery-btn" class="btn btn-primary">
-                            <i class="fas fa-images"></i> 前往畫廊
+                            <i class="fas fa-images"></i> ${i18next.t('pages.draw.uploadSuccess.galleryButton')}
                         </button>
                     </div>
                 </div>
@@ -303,7 +312,8 @@ function initCanvas() {
             // 下載按鈕事件
             document.getElementById('download-now-btn').addEventListener('click', function() {
                 const link = document.createElement('a');
-                link.download = `繪圖作品_${new Date().toISOString().slice(0, 10)}.png`;
+                const date = new Date().toISOString().slice(0, 10);
+                link.download = i18next.t('pages.draw.drawingFilename', {date: date});
                 link.href = imageData;
                 link.click();
             });
@@ -317,7 +327,7 @@ function initCanvas() {
             // 使用客戶端日誌模塊
             const logger = Logger.createLogger('DrawingApp');
             logger.error('上傳錯誤', error);
-            alert('上傳失敗，請重試');
+            alert(i18next.t('pages.draw.uploadError'));
             // 恢復按鈕狀態
             submitBtn.innerHTML = originalText;
             submitBtn.disabled = false;

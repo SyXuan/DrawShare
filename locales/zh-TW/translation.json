@@ -1,0 +1,76 @@
+{
+  "app": {
+    "name": "DrawShare",
+    "description": "創作並分享你的藝術作品"
+  },
+  "pages": {
+    "home": {
+      "title": "首頁 - DrawShare",
+      "welcome": "歡迎使用DrawShare",
+      "enterName": "請輸入您的名字",
+      "placeholder": "例如：小明",
+      "startDrawing": "開始繪圖"
+    },
+    "draw": {
+      "title": "繪圖 - DrawShare",
+      "createArt": "創作你的藝術",
+      "loading": "加載中...",
+      "guest": "訪客",
+      "brushSize": "筆刷大小:",
+      "colorPalette": "調色盤:",
+      "clear": "清除",
+      "download": "下載",
+      "submit": "送出",
+      "uploadingStatus": "上傳中...",
+      "emptyCanvasAlert": "{{username}}，似乎忘記畫圖囉，請先繪製一些內容！",
+      "uploadSuccess": {
+        "title": "上傳成功！",
+        "message": "您的作品已成功上傳。",
+        "downloadButton": "下載作品",
+        "galleryButton": "前往畫廊"
+      },
+      "uploadError": "上傳失敗，請重試",
+      "drawingFilename": "繪圖作品_{{date}}.png"
+    },
+    "gallery": {
+      "title": "所有繪圖作品 - DrawShare",
+      "allDrawings": "所有繪圖作品",
+      "createNew": "創建新繪圖",
+      "noDrawings": {
+        "title": "還沒有繪圖作品",
+        "message": "成為第一個上傳繪圖的人吧！",
+        "button": "開始繪圖"
+      },
+      "modal": {
+        "drawing": "繪圖作品",
+        "drawingOf": "{{name}}的繪圖"
+      }
+    },
+    "image": {
+      "title": "{{name}}的繪圖作品 - DrawShare",
+      "backToGallery": "返回所有作品",
+      "drawingOf": "{{name}}的繪圖作品",
+      "uploadedAt": "上傳於 {{date}}",
+      "viewAll": "查看所有作品",
+      "createNew": "創建新繪圖"
+    }
+  },
+  "common": {
+    "user": "用戶",
+    "guest": "訪客",
+    "anonymous": "匿名用戶",
+    "uploadedAt": "上傳於 {{date}}"
+  },
+  "errors": {
+    "uploadFailed": "上傳失敗",
+    "retryUpload": "請重試",
+    "noFileUploaded": "沒有上傳文件",
+    "serverError": "服務器錯誤，上傳失敗",
+    "imageNotFound": "找不到圖片",
+    "galleryError": "獲取圖片列表失敗",
+    "imageError": "獲取圖片失敗"
+  },
+  "success": {
+    "uploadSuccess": "圖片上傳成功"
+  }
+}

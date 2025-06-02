@@ -1,0 +1,76 @@
+{
+  "app": {
+    "name": "DrawShare",
+    "description": "Create and share your artwork"
+  },
+  "pages": {
+    "home": {
+      "title": "Home - DrawShare",
+      "welcome": "Welcome to DrawShare",
+      "enterName": "Please enter your name",
+      "placeholder": "Example: John",
+      "startDrawing": "Start Drawing"
+    },
+    "draw": {
+      "title": "Draw - DrawShare",
+      "createArt": "Create Your Art",
+      "loading": "Loading...",
+      "guest": "Guest",
+      "brushSize": "Brush Size:",
+      "colorPalette": "Color Palette:",
+      "clear": "Clear",
+      "download": "Download",
+      "submit": "Submit",
+      "uploadingStatus": "Uploading...",
+      "emptyCanvasAlert": "{{username}}, it seems you forgot to draw something. Please draw some content first!",
+      "uploadSuccess": {
+        "title": "Upload Successful!",
+        "message": "Your artwork has been successfully uploaded.",
+        "downloadButton": "Download Artwork",
+        "galleryButton": "Go to Gallery"
+      },
+      "uploadError": "Upload failed, please try again",
+      "drawingFilename": "Drawing_{{date}}.png"
+    },
+    "gallery": {
+      "title": "All Drawings - DrawShare",
+      "allDrawings": "All Drawings",
+      "createNew": "Create New Drawing",
+      "noDrawings": {
+        "title": "No Drawings Yet",
+        "message": "Be the first to upload a drawing!",
+        "button": "Start Drawing"
+      },
+      "modal": {
+        "drawing": "Drawing",
+        "drawingOf": "{{name}}'s Drawing"
+      }
+    },
+    "image": {
+      "title": "{{name}}'s Drawing - DrawShare",
+      "backToGallery": "Back to All Drawings",
+      "drawingOf": "{{name}}'s Drawing",
+      "uploadedAt": "Uploaded on {{date}}",
+      "viewAll": "View All Drawings",
+      "createNew": "Create New Drawing"
+    }
+  },
+  "common": {
+    "user": "User",
+    "guest": "Guest",
+    "anonymous": "Anonymous User",
+    "uploadedAt": "Uploaded on {{date}}"
+  },
+  "errors": {
+    "uploadFailed": "Upload Failed",
+    "retryUpload": "Please try again",
+    "noFileUploaded": "No file uploaded",
+    "serverError": "Server error, upload failed",
+    "imageNotFound": "Image not found",
+    "galleryError": "Failed to get image list",
+    "imageError": "Failed to get image"
+  },
+  "success": {
+    "uploadSuccess": "Image uploaded successfully"
+  }
+}
