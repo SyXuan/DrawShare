@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const cors = require('cors');
 const sqlite3 = require('sqlite3').verbose();
 const createLogger = require('./utils/logger');
@@ -36,13 +37,23 @@ app.use((req, res, next) => {
 // 設置靜態文件目錄
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/locales', express.static(path.join(__dirname, 'locales')));
+if (!fs.existsSync(path.join(__dirname, 'public/uploads'))) {
+  logger.info('上傳目錄不存在，創建"public/uploads"目錄');
+  fs.mkdirSync(path.join(__dirname, 'public/uploads'));
+}
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
 // 設置視圖引擎
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // 初始化數據庫
-const db = new sqlite3.Database(path.join(__dirname, 'data', 'drawing_share.db'), (err) => {
+const dataDir = path.join(__dirname, 'data');
+if (!fs.existsSync(dataDir)) {
+  logger.info('數據目錄不存在，創建"data"目錄');
+  fs.mkdirSync(dataDir);
+}
+const db = new sqlite3.Database(path.join(dataDir, 'drawing_share.db'), (err) => {
   if (err) {
     logger.error('無法連接到數據庫', err);
   } else {

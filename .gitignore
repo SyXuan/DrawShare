@@ -21,8 +21,8 @@ logs/
 drawing_share.db
 
 # 上傳的圖片
-public/images/*
-!public/images/.gitkeep
+public/uploads/*
+!public/uploads/.gitkeep
 
 # 操作系統相關
 .DS_Store

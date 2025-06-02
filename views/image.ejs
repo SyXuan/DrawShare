@@ -65,14 +65,14 @@
         </div>
         
         <div class="image-container mb-6">
-            <img src="/public/images/<%= image.image_file_name %>" alt="<%= i18n.t('pages.image.drawingOf', {name: image.name}) %>" class="drawing-image">
+            <img src="/public/uploads/<%= image.image_file_name %>" alt="<%= i18n.t('pages.image.drawingOf', {name: image.name}) %>" class="drawing-image">
             <div class="p-4 border-t border-gray-200">
                 <div class="flex justify-between items-center">
                     <div>
                         <h3 class="font-medium text-gray-800"><%= i18n.t('pages.image.drawingOf', {name: image.name}) %></h3>
                         <p class="text-sm text-gray-500"><%= i18n.t('common.uploadedAt', {date: new Date(image.uploaded_at).toLocaleString(i18n.language)}) %></p>
                     </div>
-                    <a href="/public/images/<%= image.image_file_name %>" download class="text-gray-500 hover:text-gray-700">
+                    <a href="/public/uploads/<%= image.image_file_name %>" download class="text-gray-500 hover:text-gray-700">
                         <i class="fas fa-download text-lg"></i>
                     </a>
                 </div>

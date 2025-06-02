@@ -12,7 +12,7 @@ const logger = createLogger('Upload');
 // 設置文件存儲
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
-    cb(null, path.join(__dirname, '../public/images'));
+    cb(null, path.join(__dirname, '../public/uploads'));
   },
   filename: function(req, file, cb) {
     // 文件名將在保存到數據庫後更新
@@ -67,8 +67,8 @@ router.post('/', upload.single('image'), async (req, res) => {
     // 生成最終文件名
     const finalFileName = Image.generateFileName(savedImage.id, name);
     logger.info('生成最終文件名', { finalFileName });
-    const oldPath = path.join(__dirname, '../public/images', req.file.filename);
-    const newPath = path.join(__dirname, '../public/images', finalFileName);
+    const oldPath = path.join(__dirname, '../public/uploads', req.file.filename);
+    const newPath = path.join(__dirname, '../public/uploads', finalFileName);
     logger.debug('準備重命名文件', { oldPath, newPath });
     
     // 重命名文件

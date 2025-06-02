@@ -16,8 +16,8 @@ router.get('/', async (req, res) => {
     // 添加圖片URL
     const imagesWithUrls = images.map(image => ({
       ...image,
-      imageUrl: `/images/${image.id}`,
-      thumbnailUrl: `/images/public/images/${image.image_file_name}`
+      imageUrl: `/uploads/${image.image_file_name}`,
+      thumbnailUrl: `/uploads/${image.image_file_name}`
     }));
     
     // 根據Accept頭返回JSON或渲染視圖
@@ -50,7 +50,7 @@ router.get('/:id', async (req, res) => {
     }
     
     // 圖片文件路徑
-    const imagePath = path.join(__dirname, '../public/images', image.image_file_name);
+    const imagePath = path.join(__dirname, '../public/uploads', image.image_file_name);
     
     // 根據Accept頭返回圖片文件或JSON數據
     if (req.accepts('image/*')) {
@@ -58,14 +58,14 @@ router.get('/:id', async (req, res) => {
     } else if (req.accepts('html')) {
       res.render('image', { image: {
         ...image,
-        imageUrl: `/images/${image.id}`,
-        thumbnailUrl: `/images/public/images/${image.image_file_name}`
+        imageUrl: `/uploads/${image.image_file_name}`,
+        thumbnailUrl: `/uploads/${image.image_file_name}`
       }});
     } else {
       res.json({
         ...image,
-        imageUrl: `/images/${image.id}`,
-        thumbnailUrl: `/images/public/images/${image.image_file_name}`
+        imageUrl: `/uploads/${image.image_file_name}`,
+        thumbnailUrl: `/uploads/${image.image_file_name}`
       });
     }
   } catch (error) {
