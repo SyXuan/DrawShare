@@ -18,10 +18,12 @@ document.addEventListener('DOMContentLoaded', function() {
         if (i18next.isInitialized) {
             const username = localStorage.getItem('username') || i18next.t('common.guest');
             document.getElementById('username-display').textContent = username;
+            hideLoadingOverlay();
         } else {
             i18next.on('initialized', function() {
                 const username = localStorage.getItem('username') || i18next.t('common.guest');
                 document.getElementById('username-display').textContent = username;
+                hideLoadingOverlay();
             });
         }
         
@@ -424,3 +426,23 @@ function initCanvas() {
         return new Blob([ab], {type: mimeString});
     }
 }
+
+function hideLoadingOverlay() {
+    const overlay = document.getElementById('loading-overlay');
+    if (overlay) overlay.classList.add('hide');
+}
+
+function waitI18nAndHideLoading() {
+    if (typeof i18next !== 'undefined') {
+        if (i18next.isInitialized) {
+            hideLoadingOverlay();
+        } else {
+            i18next.on('initialized', hideLoadingOverlay);
+        }
+    } else {
+        // 如果 i18next 沒載入，直接隱藏（避免卡住）
+        hideLoadingOverlay();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', waitI18nAndHideLoading);
