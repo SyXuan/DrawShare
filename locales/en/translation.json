@@ -1,19 +1,19 @@
 {
   "app": {
     "name": "DrawShare",
-    "description": "Create and share your artwork"
+    "description": "Draw your ideal bride and groom"
   },
   "pages": {
     "home": {
       "title": "Home - DrawShare",
-      "welcome": "Welcome to DrawShare",
+      "welcome": "Thank you for being here",
       "enterName": "Please enter your name",
-      "placeholder": "Example: John",
+      "placeholder": "Example: BingSuan is handsome",
       "startDrawing": "Start Drawing"
     },
     "draw": {
       "title": "Draw - DrawShare",
-      "createArt": "Create Your Art",
+      "createArt": "Draw for BingSuan and Michelle",
       "loading": "Loading...",
       "guest": "Guest",
       "brushSize": "Brush Size:",
@@ -22,7 +22,7 @@
       "download": "Download",
       "submit": "Submit",
       "uploadingStatus": "Uploading...",
-      "emptyCanvasAlert": "{{username}}, it seems you forgot to draw something. Please draw some content first!",
+      "emptyCanvasAlert": "{{username}}, did you forget who the bride and groom are!?",
       "uploadSuccess": {
         "title": "Upload Successful!",
         "message": "Your artwork has been successfully uploaded.",
@@ -33,9 +33,9 @@
       "drawingFilename": "Drawing_{{date}}.png"
     },
     "gallery": {
-      "title": "All Drawings - DrawShare",
-      "allDrawings": "All Drawings",
-      "createNew": "Create New Drawing",
+      "title": "Everyone's Drawings - DrawShare",
+      "allDrawings": "Everyone's Drawings",
+      "createNew": "Draw Another One",
       "noDrawings": {
         "title": "No Drawings Yet",
         "message": "Be the first to upload a drawing!",

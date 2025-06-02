@@ -1,19 +1,19 @@
 {
   "app": {
     "name": "DrawShare",
-    "description": "創作並分享你的藝術作品"
+    "description": "畫出心目中的新郎和新娘"
   },
   "pages": {
     "home": {
       "title": "首頁 - DrawShare",
-      "welcome": "歡迎使用DrawShare",
+      "welcome": "謝謝有你在這裡",
       "enterName": "請輸入您的名字",
-      "placeholder": "例如：小明",
+      "placeholder": "例如：秉軒好帥/米雪好正",
       "startDrawing": "開始繪圖"
     },
     "draw": {
       "title": "繪圖 - DrawShare",
-      "createArt": "創作你的藝術",
+      "createArt": "畫畫送給秉軒和米雪",
       "loading": "加載中...",
       "guest": "訪客",
       "brushSize": "筆刷大小:",
@@ -22,34 +22,34 @@
       "download": "下載",
       "submit": "送出",
       "uploadingStatus": "上傳中...",
-      "emptyCanvasAlert": "{{username}}，似乎忘記畫圖囉，請先繪製一些內容！",
+      "emptyCanvasAlert": "{{username}}，忘記新郎新娘是誰了！?",
       "uploadSuccess": {
         "title": "上傳成功！",
         "message": "您的作品已成功上傳。",
         "downloadButton": "下載作品",
-        "galleryButton": "前往畫廊"
+        "galleryButton": "看看大家畫什麼"
       },
       "uploadError": "上傳失敗，請重試",
       "drawingFilename": "繪圖作品_{{date}}.png"
     },
     "gallery": {
-      "title": "所有繪圖作品 - DrawShare",
-      "allDrawings": "所有繪圖作品",
-      "createNew": "創建新繪圖",
+      "title": "大家畫的 - DrawShare",
+      "allDrawings": "大家畫的",
+      "createNew": "再畫一張",
       "noDrawings": {
-        "title": "還沒有繪圖作品",
-        "message": "成為第一個上傳繪圖的人吧！",
+        "title": "還沒有作品",
+        "message": "成為第一個上傳的人吧！",
         "button": "開始繪圖"
       },
       "modal": {
         "drawing": "繪圖作品",
-        "drawingOf": "{{name}}的繪圖"
+        "drawingOf": "{{name}} 畫的"
       }
     },
     "image": {
-      "title": "{{name}}的繪圖作品 - DrawShare",
+      "title": "{{name}} 的作品 - DrawShare",
       "backToGallery": "返回所有作品",
-      "drawingOf": "{{name}}的繪圖作品",
+      "drawingOf": "{{name}} 畫的",
       "uploadedAt": "上傳於 {{date}}",
       "viewAll": "查看所有作品",
       "createNew": "創建新繪圖"
