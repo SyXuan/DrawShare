@@ -55,6 +55,45 @@ function initCanvas() {
     let currentColor = '#000000';
     let brushSize = 5;
     
+    // 歷史記錄
+    let history = [];
+    let currentStep = -1;
+    
+    // 保存當前畫布狀態
+    function saveState() {
+        // 如果當前不是最新狀態，刪除之後的歷史記錄
+        if (currentStep < history.length - 1) {
+            history = history.slice(0, currentStep + 1);
+        }
+        
+        // 保存當前畫布狀態
+        history.push(canvas.toDataURL());
+        currentStep = history.length - 1;
+        
+        // 更新上一步按鈕狀態
+        updateUndoButton();
+    }
+    
+    // 更新上一步按鈕狀態
+    function updateUndoButton() {
+        const undoBtn = document.getElementById('undo-btn');
+        undoBtn.disabled = currentStep <= 0;
+    }
+    
+    // 上一步功能
+    function undo() {
+        if (currentStep > 0) {
+            currentStep--;
+            const img = new Image();
+            img.onload = function() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0);
+            };
+            img.src = history[currentStep];
+            updateUndoButton();
+        }
+    }
+    
     // 更新筆刷大小顯示
     const brushSizeInput = document.getElementById('brush-size');
     const sizeDisplay = document.getElementById('size-display');
@@ -68,6 +107,8 @@ function initCanvas() {
     function startDrawing(e) {
         isDrawing = true;
         [lastX, lastY] = getCoordinates(e);
+        // 開始新的繪圖時保存狀態
+        saveState();
     }
     
     function draw(e) {
@@ -89,7 +130,11 @@ function initCanvas() {
     }
     
     function stopDrawing() {
-        isDrawing = false;
+        if (isDrawing) {
+            isDrawing = false;
+            // 繪圖結束時保存狀態
+            saveState();
+        }
     }
     
     // 獲取鼠標/觸摸坐標
@@ -162,9 +207,17 @@ function initCanvas() {
     
     // 清除畫布
     document.getElementById('clear-btn').addEventListener('click', function() {
+        saveState(); // 保存清除前的狀態
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
+        saveState(); // 保存清除後的狀態
     });
+    
+    // 上一步按鈕
+    document.getElementById('undo-btn').addEventListener('click', undo);
+    
+    // 初始化時保存空白畫布狀態
+    saveState();
     
     // 下載畫布
     document.getElementById('download-btn').addEventListener('click', function() {
