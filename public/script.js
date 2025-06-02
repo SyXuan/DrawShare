@@ -166,20 +166,27 @@ function initCanvas() {
             e.preventDefault(); // 只在單指觸摸時阻止默認行為
             startDrawing(e);
         }
-    });
+    }, {passive: false});
     
     canvas.addEventListener('touchmove', function(e) {
         if (e.touches.length === 1) {
             e.preventDefault(); // 只在單指觸摸時阻止默認行為
             draw(e);
         }
-    });
+    }, {passive: false});
     
     canvas.addEventListener('touchend', function(e) {
         if (e.touches.length === 0) {
             stopDrawing();
         }
     });
+    
+    // 防止 Safari 下拉刷新
+    document.body.addEventListener('touchmove', function(e) {
+        if (e.target === canvas || canvas.contains(e.target)) {
+            e.preventDefault();
+        }
+    }, {passive: false});
     
     // 顏色選擇
     const colorOptions = document.querySelectorAll('.color-option');
