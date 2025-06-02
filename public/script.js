@@ -161,9 +161,25 @@ function initCanvas() {
     canvas.addEventListener('mouseout', stopDrawing);
     
     // 觸摸事件支持
-    canvas.addEventListener('touchstart', startDrawing);
-    canvas.addEventListener('touchmove', draw);
-    canvas.addEventListener('touchend', stopDrawing);
+    canvas.addEventListener('touchstart', function(e) {
+        if (e.touches.length === 1) {
+            e.preventDefault(); // 只在單指觸摸時阻止默認行為
+            startDrawing(e);
+        }
+    });
+    
+    canvas.addEventListener('touchmove', function(e) {
+        if (e.touches.length === 1) {
+            e.preventDefault(); // 只在單指觸摸時阻止默認行為
+            draw(e);
+        }
+    });
+    
+    canvas.addEventListener('touchend', function(e) {
+        if (e.touches.length === 0) {
+            stopDrawing();
+        }
+    });
     
     // 顏色選擇
     const colorOptions = document.querySelectorAll('.color-option');
