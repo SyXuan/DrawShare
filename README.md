@@ -1,99 +1,136 @@
 # DrawShare
 
-這是一個簡單的繪圖分享Web應用，允許用戶在畫布上繪圖，並將作品上傳到伺服器進行分享。
+A simple web application for drawing and sharing artwork, allowing users to draw on a canvas and upload their creations to the server for sharing.
 
-## 功能特點
+## Features
 
-- 使用者輸入名字
-- 畫布可以選擇顏色、清除
-- 使用者可以下載當前的畫布
-- 送出後上傳到伺服器顯示有沒有成功，沒成功就重試
+- User name input
+- Canvas with color selection and clear functionality
+- Ability to download the current canvas
+- Upload to server with success/failure feedback and retry option
 
-## 技術棧
+## Tech Stack
 
-### 前端
+### Frontend
+
 - HTML5 Canvas
 - Tailwind CSS
 - JavaScript
 
-### 後端
+### Backend
+
 - Node.js
 - Express.js
 - SQLite
-- EJS (模板引擎)
+- EJS (Template Engine)
 
-## 安裝與運行
+## Installation and Running
 
-### 前提條件
+### Prerequisites
 
-- Node.js (v14+)
-- npm
+- Node.js (v14+) and npm
+- OR Docker and Docker Compose
 
-### 安裝步驟
+### Installation Steps
 
-1. 克隆或下載此專案
+#### Option 1: Traditional Installation
 
-2. 安裝依賴
-   ```
+1. Clone or download this project
+
+2. Install dependencies
+
+   ```bash
    npm install
    ```
 
-3. 啟動服務器
-   ```
+3. Start the server
+
+   ```bash
    npm start
    ```
-   或者使用開發模式（自動重啟）
-   ```
+
+   Or use development mode (auto-restart)
+
+   ```bash
    npm run dev
    ```
 
-4. 訪問應用
-   打開瀏覽器，訪問 http://localhost:3000
+4. Access the application
+   Open your browser and visit http://localhost:3000
 
-## API 文檔
+#### Option 2: Using Docker Compose
 
-### 上傳圖片
+1. Clone or download this project
+
+2. Start the application using Docker Compose
+
+   ```bash
+   docker compose up
+   ```
+
+   Or run in detached mode
+
+   ```bash
+   docker compose up -d
+   ```
+
+3. Access the application
+   Open your browser and visit http://localhost:3000
+
+4. To stop the application
+
+   ```bash
+   docker compose down
+   ```
+
+## API Documentation
+
+### Upload Image
+
 - **URL**: `/upload`
-- **方法**: POST
-- **請求體**:
-  - `image`: 圖片文件
-  - `name`: 用戶名
-- **響應**:
+- **Method**: POST
+- **Request Body**:
+  - `image`: Image file
+  - `name`: Username
+- **Response**:
+
   ```json
   {
     "success": true,
     "imageId": 1,
-    "message": "圖片上傳成功"
+    "message": "Image uploaded successfully"
   }
   ```
 
-### 獲取所有圖片
+### Get All Images
+
 - **URL**: `/images`
-- **方法**: GET
-- **響應**: 圖片列表或HTML頁面（根據Accept頭）
+- **Method**: GET
+- **Response**: List of images or HTML page (based on Accept header)
 
-### 獲取單個圖片
+### Get Single Image
+
 - **URL**: `/images/:id`
-- **方法**: GET
-- **響應**: 圖片文件、JSON數據或HTML頁面（根據Accept頭）
+- **Method**: GET
+- **Response**: Image file, JSON data, or HTML page (based on Accept header)
 
-## 項目結構
+## Project Structure
 
+```text
+├── app.js                # Main application file
+├── routes/              # Route files
+│   ├── upload.js        # Upload handling
+│   └── images.js        # Image retrieval
+├── models/              # Data models
+│   └── image.js         # Image model
+├── public/              # Static files
+│   └── images/          # Uploaded images
+├── views/               # EJS views
+│   ├── images.ejs       # Image list page
+│   └── image.ejs        # Single image page
+└── design/              # Frontend design files
 ```
-├── app.js                # 主應用文件
-├── routes/              # 路由文件
-│   ├── upload.js        # 處理上傳
-│   └── images.js        # 處理圖片獲取
-├── models/              # 數據模型
-│   └── image.js         # 圖片模型
-├── public/              # 靜態文件
-│   └── images/          # 上傳的圖片
-├── views/               # EJS視圖
-│   ├── images.ejs       # 圖片列表頁面
-│   └── image.ejs        # 單個圖片頁面
-└── design/              # 前端設計文件
-```
 
-## 許可證
+## License
 
-MIT
+GNU General Public License v3.0
