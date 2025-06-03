@@ -8,12 +8,12 @@
       "title": "Home - DrawShare",
       "welcome": "Thank you for being here",
       "enterName": "Please enter your name",
-      "placeholder": "Example: BingSuan is handsome",
+      "placeholder": "Example: BingSyuan is handsome",
       "startDrawing": "Start Drawing"
     },
     "draw": {
       "title": "Draw - DrawShare",
-      "createArt": "Draw for BingSuan and Michelle",
+      "createArt": "Draw for BingSyuan and Michelle",
       "loading": "Loading...",
       "guest": "Guest",
       "brushSize": "Brush Size:",
